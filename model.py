@@ -22,8 +22,15 @@ X_train, y_train = shuffle(X, y, random_state=0)
 
 # random forest 
 from sklearn.ensemble import RandomForestRegressor
-rf = RandomForestRegressor()
+rfr = RandomForestRegressor()
 
+np.mean(cross_val_score(rfr,X_train,y_train,scoring = 'neg_mean_absolute_error', cv= 3))
+
+# tune models GridsearchCV 
+from sklearn.model_selection import GridSearchCV
+parameters = {'n_estimators':range(10,300,10), 'criterion':('mse','mae'), 'max_features':('auto','sqrt','log2')}
+
+rf = GridSearchCV(rf,parameters,scoring='neg_mean_absolute_error',cv=3)
 rf.fit(X_train,y_train)
 
 num_incorrect = 0
